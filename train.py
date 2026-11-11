@@ -82,14 +82,9 @@ def license_ok(loc):
 df['license_ok'] = df['license'].apply(license_ok) 
 
 # 4. Host description (make a flag if host wrote the description)
-
-# In[16]:
-
-
 df['host_has_descr'] = (df['host_about'].str.len().fillna(0) >= 20).astype(int)
 to_drop_replaced.append('host_about')
 to_drop_replaced.append('license')
-
 
 # 5. Amenities. (Create a new feature number of amenities)
 df['n_amenities'] = df['amenities'].apply(json.loads).str.len()
@@ -175,17 +170,17 @@ df = df.drop(columns=to_drop_categorical_analysis)
 # **Data split and missing values**
 df_full_train, df_test = train_test_split(df, test_size=0.2, random_state=1)
 
-df_full_train = df_train.reset_index(drop=True)
+df_full_train = df_full_train.reset_index(drop=True)
 df_test = df_test.reset_index(drop=True)
 
 y_full_train = df_full_train.log_price.values
 y_test = df_test.log_price.values
 
 to_drop = ['price', 'log_price']
-df_full_train = df_train.drop(columns=to_drop)
+df_full_train = df_full_train.drop(columns=to_drop)
 df_test = df_test.drop(columns=to_drop)
 
-to_fill_median = df_full_train.columns[df_train.isnull().any()].tolist()
+to_fill_median = df_full_train.columns[df_full_train.isnull().any()].tolist()
 median_data = df_full_train[to_fill_median].median()
 df_full_train = df_full_train.fillna(median_data)
 df_test = df_test.fillna(median_data)
@@ -199,7 +194,7 @@ dv = DictVectorizer(sparse=True)
 X_train = dv.fit_transform(train_dicts)
 X_test = dv.transform(test_dicts)
 features = dv.get_feature_names_out().tolist()
-dtrain = xgb.DMatrix(X_train, label=y_train,feature_names=features) 
+dtrain = xgb.DMatrix(X_train, label=y_full_train,feature_names=features) 
 dtest = xgb.DMatrix(X_test, label=y_test,feature_names=features)
 
 xgb_params = {
