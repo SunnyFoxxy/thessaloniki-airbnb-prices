@@ -16,6 +16,7 @@ from pydantic import BaseModel
 MODEL_PATH = Path(os.getenv("MODEL_PATH", Path(__file__).with_name("model.bin")))
 with MODEL_PATH.open("rb") as model_file:
     dv, model, median_data = pickle.load(model_file)
+    features = dv.get_feature_names_out().tolist()
 
 app = FastAPI(title="ML Zoomcamp 2026 Midterm Project Thessaloniki Airbnb Prices")
 
@@ -52,6 +53,12 @@ class Listing(BaseModel):
     host_tenure_month: int
     user_tenure_month: int
 
+def get_price(price):
+
+    price = round(float(np.expm1(price)),2)
+
+    return price
+
 
 
 @app.get("/health")
@@ -68,10 +75,9 @@ def predict(listing: Listing):
     df = df.fillna(median_data)
     record = df.to_dict(orient='records')
     X_test = dv.transform(record)
-    features = dv.get_feature_names_out().tolist()
     
     dmatrix = xgb.DMatrix(X_test, feature_names=features)
     preds = model.predict(dmatrix)
     return {
-        "prediction": float(np.expm1(preds[0]))
+        "prediction": get_price(preds[0])
     }
