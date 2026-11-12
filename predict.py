@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import os
 import pandas as pd
 import pickle
@@ -10,40 +9,8 @@ from typing import Any
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from model import DEFAULTS_PATH, normalize_record
+from model import DEFAULTS_PATH
 
-FEATURE_COLUMNS = [
-    "host_is_superhost",
-    "host_listings_count",
-    "host_has_profile_pic",
-    "host_identity_verified",
-    "neighbourhood_cleansed",
-    "latitude",
-    "longitude",
-    "room_type",
-    "accommodates",
-    "bedrooms",
-    "beds",
-    "minimum_nights",
-    "availability_90",
-    "number_of_reviews",
-    "review_scores_rating",
-    "review_scores_location",
-    "calculated_host_listings_count",
-    "calculated_host_listings_count_private_rooms",
-    "reviews_per_month",
-    "host_location_cat",
-    "has_reviews",
-    "license_ok",
-    "host_has_descr",
-    "n_amenities",
-    "days_since_last_review",
-    "days_since_first_review",
-    "bathrooms_num",
-    "bathrooms_shared",
-    "host_tenure_month",
-    "user_tenure_month",
-]
 
 MODEL_PATH = Path(os.getenv("MODEL_PATH", Path(__file__).with_name("model.bin")))
 with MODEL_PATH.open("rb") as model_file:
