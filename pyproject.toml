@@ -8,11 +8,13 @@ authors = [
 ]
 requires-python = ">=3.14"
 dependencies = [
+    "fastapi>=0.162.5",
     "matplotlib>=3.11.2",
     "numpy>=2.5.4",
     "pandas>=3.1.1",
     "scikit-learn>=1.9.1",
     "seaborn>=0.13.2",
+    "uvicorn>=0.54.0",
     "xgboost>=3.4.1",
 ]
 

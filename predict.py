@@ -1,15 +1,16 @@
 from __future__ import annotations
 
+import numpy as np
 import os
 import pandas as pd
 import pickle
+import xgboost as xgb
+
 from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI
 from pydantic import BaseModel
-
-from model import DEFAULTS_PATH
 
 
 MODEL_PATH = Path(os.getenv("MODEL_PATH", Path(__file__).with_name("model.bin")))
@@ -56,21 +57,21 @@ class Listing(BaseModel):
 @app.get("/health")
 def health() -> dict[str, Any]:
     return {
-        "status": "ok",
-        "model_sha256": MODEL_SHA256,
-        "feature_defaults_sha256": FEATURE_DEFAULTS_SHA256,
+        "status": "ok"
     }
 
 
 @app.post("/predict")
-def predict(lists: list[Listing]):
+def predict(listing: Listing):
    
     df = pd.DataFrame([listing.model_dump()])
     df = df.fillna(median_data)
     record = df.to_dict(orient='records')
-
-    dmatrix = xgb.DMatrix(record)
-    preds = model.pri=edict(dmatrix)
+    X_test = dv.transform(record)
+    features = dv.get_feature_names_out().tolist()
+    
+    dmatrix = xgb.DMatrix(X_test, feature_names=features)
+    preds = model.predict(dmatrix)
     return {
-        "prediction": preds.tolist()
+        "prediction": float(np.expm1(preds[0]))
     }
