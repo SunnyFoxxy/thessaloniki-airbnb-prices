@@ -16,7 +16,7 @@ from pydantic import BaseModel
 MODEL_PATH = Path(os.getenv("MODEL_PATH", Path(__file__).with_name("model.bin")))
 with MODEL_PATH.open("rb") as model_file:
     dv, model, median_data = pickle.load(model_file)
-    features = dv.get_feature_names_out().tolist()
+features = dv.get_feature_names_out().tolist()
 
 app = FastAPI(title="ML Zoomcamp 2026 Midterm Project Thessaloniki Airbnb Prices")
 
