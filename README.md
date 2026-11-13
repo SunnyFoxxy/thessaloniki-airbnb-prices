@@ -202,12 +202,13 @@ Stop the container with `Ctrl + C`.
 
 The service is deployed on [Render](https://render.com).
 
-URL: RENDER_URL
+URL: https://thessaloniki-airbnb-prices.onrender.com
+![Render test][images/render_test.png]
 
 Test it:
 
 ```bash
-curl -X POST RENDER_URL/predict -H "Content-Type: application/json" -d @example_listing.json
+curl -X POST https://thessaloniki-airbnb-prices.onrender.com/predict -H "Content-Type: application/json" -d @example_listing.json
 ```
 
 On the free plan the service sleeps after 15 minutes without requests, so the first request can take about a minute.
