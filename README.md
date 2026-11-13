@@ -203,7 +203,7 @@ Stop the container with `Ctrl + C`.
 The service is deployed on [Render](https://render.com).
 
 URL: https://thessaloniki-airbnb-prices.onrender.com
-![Render test][images/render_test.png]
+![Render test](images/render_test.png)
 
 Test it:
 
