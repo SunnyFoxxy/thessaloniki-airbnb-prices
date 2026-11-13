@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: thessaloniki-airbnb-prices
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - key: PORT
+        value: "9696"
