@@ -78,7 +78,7 @@ Notes from tuning:
 
 **Final model: XGBoost.** It was checked once on the test set:
 
-- trained on train only (notebook): test RMSE = 0.3099;
+- trained on train only (notebook): test RMSE = 0.3098;
 - trained on train + validation (`train.py`): test RMSE = 0.3046.
 
 RMSE 0.30 on the log scale means that the prediction is usually about 1.35 times higher or lower than the real price. Part of the price depends on things that are not in the data (photos, renovation, view), so this is a reasonable result for Airbnb prices.
