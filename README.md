@@ -10,10 +10,15 @@ When a host puts a new apartment on Airbnb, the first question is: what price pe
 
 The price depends on many things together: the location, the size of the apartment, the number of guests, reviews, the host profile, how many amenities there are. It is hard to keep all of them in mind at once.
 
-In this project I train a regression model that predicts the price per night from the listing characteristics. The model can be used as a pricing helper:
+In this project I train a regression model that predicts the price per night from the listing characteristics. The model can be used as a pricing helper, to get a reference price for a listing:
 
-- a new host sends the description of the listing to the web service and gets a recommended price;
+
+- a host who creates a new listing gets a starting point for the price;
 - an existing host can check if the current price is above or below the market for similar listings.
+
+
+The prediction is not exact (see [Limitations](#limitations)), so it is a reference, not a final price.
+
 
 I chose Thessaloniki because I live here, so I can check if the results make sense.
 
@@ -82,6 +87,14 @@ Notes from tuning:
 - trained on train + validation (`train.py`): test RMSE = 0.3046.
 
 RMSE 0.30 on the log scale means that the prediction is usually about 1.35 times higher or lower than the real price. Part of the price depends on things that are not in the data (photos, renovation, view), so this is a reasonable result for Airbnb prices.
+
+## Limitations
+
+
+- **Hosts with many listings.** The data was split randomly by listing, but many hosts have several listings, so listings of the same host can be both in train and test. The model partly learns the host's pricing style, so the random-split result is optimistic. With GroupKFold by `host_id` (all listings of one host in the same fold) the XGBoost RMSE is 0.3296 ± 0.0194 instead of 0.2955 ± 0.0124 with the random K-Fold. For a completely new host, about 0.33 is the more honest estimate. The hyperparameters were tuned with the random split; Group K-Fold was added at the end as an extra check, and a full rework with a group split could change the parameters slightly.
+- **New listings without reviews.** The model can handle them (about 11% of the data has no reviews), but it is less accurate: on the test set the RMSE is 0.366 for listings without reviews (112 listings) and 0.301 for listings with reviews (808 listings).
+- **Data range.** Listings with price above 1000 euros and with `minimum_nights` above 30 were removed before the split. The model is made for short-term rentals up to 1000 euros per night and should not be used outside this range.
+
 
 ## Project structure
 
