@@ -68,6 +68,8 @@ Data split: 60% train / 20% validation / 20% test (`random_state=1`). All parame
 
 RMSE is calculated on `log_price`.
 
+To check that the difference is not random, I ran 5-fold cross-validation on train + validation with the same folds for both models: XGBoost 0.2955 ± 0.0124, Random Forest 0.3028 ± 0.0072. XGBoost is better on 4 of 5 folds, so the choice is stable, but the advantage is small.
+
 Notes from tuning:
 
 - Ridge: alpha from 5 to 15 gives the same result. Log transformation of skewed features made the result worse, so it is not used.
