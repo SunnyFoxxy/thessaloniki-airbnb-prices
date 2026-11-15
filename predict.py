@@ -7,10 +7,10 @@ import pickle
 import xgboost as xgb
 
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from fastapi import FastAPI
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 MODEL_PATH = Path(os.getenv("MODEL_PATH", Path(__file__).with_name("model.bin")))
@@ -22,36 +22,45 @@ app = FastAPI(title="ML Zoomcamp 2026 Midterm Project Thessaloniki Airbnb Prices
 
 
 class Listing(BaseModel):
-    host_is_superhost: str
-    host_listings_count: int
-    host_has_profile_pic: str
-    host_identity_verified: str
-    neighbourhood_cleansed: str
+    host_is_superhost: Literal['t', 'f']
+    host_listings_count: int = Field(ge=0)
+    host_has_profile_pic: Literal['t', 'f']
+    host_identity_verified: Literal['t', 'f']
+    neighbourhood_cleansed: Literal[
+        'Ampelokipon – Menemeni',
+        'Kalamaria',
+        'Kordelio – Evosmos',
+        'Neapolis – Sykeon',
+        'Pavlou Mela',
+        'Pilea – Chortiatis',
+        'Thessaloniki',
+    ]
     latitude: float
     longitude: float
-    room_type: str
-    accommodates: int
-    bedrooms: int
-    beds: float | None = None
-    minimum_nights: float
-    availability_90: int
-    number_of_reviews: int
-    review_scores_rating: float | None = None
-    review_scores_location: float | None = None
-    calculated_host_listings_count: int
-    calculated_host_listings_count_private_rooms: int
-    reviews_per_month: float
-    host_location_cat: str
-    has_reviews: int
-    license_ok: int
-    host_has_descr: int
-    n_amenities: int
-    days_since_last_review: float | None = None
-    days_since_first_review: float | None = None
-    bathrooms_num: int
-    bathrooms_shared: int
-    host_tenure_month: int
-    user_tenure_month: int
+    room_type: Literal['Entire home/apt', 'Private room', 'Shared room']
+    accommodates: int = Field(ge=1)
+    bedrooms: int = Field(ge=0)
+    beds: float | None = Field(default=None, ge=0)
+    minimum_nights: float = Field(ge=1, le=30)
+    availability_90: int = Field(ge=0, le=90)
+    number_of_reviews: int = Field(ge=0)
+    review_scores_rating: float | None = Field(default=None, ge=0, le=5)
+    review_scores_location: float | None = Field(default=None, ge=0, le=5)
+    calculated_host_listings_count: int = Field(ge=0)
+    calculated_host_listings_count_private_rooms: int = Field(ge=0)
+    reviews_per_month: float = Field(ge=0)
+    host_location_cat: Literal['thessaloniki', 'greece', 'abroad', 'unknown']
+    has_reviews: Literal[0, 1]
+    license_ok: Literal[0, 1]
+    host_has_descr: Literal[0, 1]
+    n_amenities: int = Field(ge=0)
+    days_since_last_review: float | None = Field(default=None, ge=0)
+    days_since_first_review: float | None = Field(default=None, ge=0)
+    bathrooms_num: Literal[0, 1]
+    bathrooms_shared: Literal[0, 1]
+    host_tenure_month: int = Field(ge=0)
+    user_tenure_month: int = Field(ge=0)
+
 
 def get_price(price):
 

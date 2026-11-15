@@ -181,7 +181,9 @@ Expected answer:
 
 The real price of this listing is 88 euros.
 
-Fields `beds`, `review_scores_rating`, `review_scores_location`, `days_since_last_review` and `days_since_first_review` are optional: if they are not in the request, the service fills them with the median from the training data. All other fields are required.
+Fields `beds`, `review_scores_rating`, `review_scores_location`, `days_since_last_review` and `days_since_first_review` are optional: if they are not in the request, the service fills them with the median from the training data. 
+
+All other fields are required. The service validates the input: categorical fields accept only the values that exist in the training data (for example, `room_type` must be `Entire home/apt`, `Private room` or `Shared room`), and numeric fields have ranges (for example, `minimum_nights` from 1 to 30). A wrong request gets the error 422 with the description of the problem.
 
 Health check:
 
