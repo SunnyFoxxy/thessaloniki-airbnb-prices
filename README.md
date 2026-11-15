@@ -106,6 +106,7 @@ RMSE 0.30 on the log scale means that the prediction is usually about 1.35 times
 | `model.bin` | saved model: DictVectorizer, XGBoost model and medians for missing values |
 | `predict.py` | FastAPI web service that loads `model.bin` and returns the price |
 | `example_listing.json` | example request (a real listing from the test set, real price 88 euros) |
+| `test.py` | sends the example listing to the service and checks the answer |
 | `Dockerfile` | Docker image for the web service |
 | `pyproject.toml`, `uv.lock` | dependencies (managed with uv) |
 | `data/listings.csv.gz` | dataset |
@@ -180,6 +181,18 @@ Expected answer:
 ```
 
 The real price of this listing is 88 euros.
+
+Or run the test script (it sends the same listing and checks the answer):
+
+
+    uv run python test.py
+
+
+To test the cloud service, pass its URL:
+
+
+    uv run python test.py https://thessaloniki-airbnb-prices.onrender.com/predict
+
 
 Fields `beds`, `review_scores_rating`, `review_scores_location`, `days_since_last_review` and `days_since_first_review` are optional: if they are not in the request, the service fills them with the median from the training data. 
 
