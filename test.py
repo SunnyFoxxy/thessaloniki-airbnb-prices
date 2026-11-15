@@ -50,5 +50,5 @@ with urlopen(request) as response:
     result = json.load(response)
 
 assert set(result) == {"prediction"}
-
+assert result["prediction"] > 0
 print(result)
