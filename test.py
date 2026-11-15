@@ -41,7 +41,7 @@ listing = {
 
 request = Request(
     url,
-    data=json.dumps(client).encode("utf-8"),
+    data=json.dumps(listing).encode("utf-8"),
     headers={"Content-Type": "application/json"},
     method="POST",
 )
@@ -49,7 +49,6 @@ request = Request(
 with urlopen(request) as response:
     result = json.load(response)
 
-assert set(result) == {"conversion_probability", "conversion"}
-assert 0 <= result["conversion_probability"] <= 1
-assert isinstance(result["conversion"], bool)
+assert set(result) == {"prediction"}
+
 print(result)
