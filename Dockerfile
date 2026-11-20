@@ -9,7 +9,7 @@ WORKDIR /code
 COPY pyproject.toml uv.lock .python-version ./
 RUN uv sync --locked --no-dev 
 
-COPY predict.py model.bin ./
+COPY predict.py model.json preprocessor.bin ./
 
 EXPOSE 9696
 ENTRYPOINT ["uvicorn", "predict:app", "--host", "0.0.0.0", "--port", "9696"]

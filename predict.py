@@ -13,9 +13,14 @@ from fastapi import FastAPI
 from pydantic import BaseModel, Field
 
 
-MODEL_PATH = Path(os.getenv("MODEL_PATH", Path(__file__).with_name("model.bin")))
-with MODEL_PATH.open("rb") as model_file:
-    dv, model, median_data = pickle.load(model_file)
+MODEL_PATH = Path(os.getenv("MODEL_PATH", Path(__file__).with_name("model.json")))
+PREPROCESSOR_PATH = Path(os.getenv("PREPROCESSOR_PATH", Path(__file__).with_name("preprocessor.bin")))
+
+with PREPROCESSOR_PATH.open("rb") as f_in:
+    dv, median_data = pickle.load(f_in)
+
+model = xgb.Booster()
+model.load_model(MODEL_PATH)
 features = dv.get_feature_names_out().tolist()
 
 app = FastAPI(title="ML Zoomcamp 2026 Midterm Project Thessaloniki Airbnb Prices")

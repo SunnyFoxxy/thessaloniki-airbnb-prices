@@ -102,9 +102,10 @@ RMSE 0.30 on the log scale means that the prediction is usually about 1.35 times
 |---|---|
 | `notebook.ipynb` | data cleaning, feature engineering, EDA, model training and tuning |
 | `cleaned_notebook.ipynb` | only the steps needed to train the final model (base for `train.py`) |
-| `train.py` | trains the final XGBoost model and saves it to `model.bin` |
-| `model.bin` | saved model: DictVectorizer, XGBoost model and medians for missing values |
-| `predict.py` | FastAPI web service that loads `model.bin` and returns the price |
+| `train.py` | trains the final XGBoost model and saves it to `model.json` (model) and `preprocessor.bin` (DictVectorizer and medians) |
+| `model.json` | saved XGBoost model in its native format, portable across systems |
+| `preprocessor.bin` | DictVectorizer and medians for missing values |
+| `predict.py` | FastAPI web service that loads the model and the preprocessor and returns the price |
 | `example_listing.json` | example request (a real listing from the test set, real price 88 euros) |
 | `test.py` | sends the example listing to the service and checks the answer |
 | `Dockerfile` | Docker image for the web service |
@@ -159,7 +160,7 @@ Expected output:
 
 ```
 rmse test: 0.30460481892481467
-Model saved to model.bin
+Model saved to model.json, preprocessor saved to preprocessor.bin
 ```
 
 ### 4. Run the web service locally

@@ -16,7 +16,8 @@ MIN_CHILD_WEIGHT = 5
 NUM_BOOST_ROUND = 301
 
 DATA_PATH = 'data/listings.csv.gz'
-MODEL_FILE = 'model.bin'
+MODEL_FILE = 'model.json'
+PREPROCESSOR_FILE = 'preprocessor.bin'
 
 def host_location_category(loc): 
     if pd.isna(loc): 
@@ -218,9 +219,11 @@ def main():
     rmse  = root_mean_squared_error(y_test, y_pred)
     print('rmse test:', rmse)
 
-    with open(MODEL_FILE, 'wb') as f_out:
-        pickle.dump((dv, xgb_final, median_data), f_out)
-    print(f'Model saved to {MODEL_FILE}')
+    xgb_final.save_model(MODEL_FILE)
+    with open(PREPROCESSOR_FILE, 'wb') as f_out:
+        pickle.dump((dv, median_data), f_out)
+
+    print(f'Model saved to {MODEL_FILE}, preprocessor saved to {PREPROCESSOR_FILE}')
 
 if __name__ == '__main__':
     main()
